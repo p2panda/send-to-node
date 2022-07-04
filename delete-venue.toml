@@ -1,0 +1,4 @@
+action = "delete"
+version = 1
+schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
+previous_operations = ["00208a717ae3c8996f50a19607606ae7c94e98e7f21b9c3254078565d428829841b3"]

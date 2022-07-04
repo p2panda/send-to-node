@@ -1,0 +1,18 @@
+action = "create"
+version = 1
+schema = "schema_definition_v1"
+
+[fields.name]
+type = "str"
+value = "event"
+
+[fields.description]
+type = "str"
+value = "An event in a historical venue"
+
+[fields.fields]
+type = "pinned_relation_list"
+value = [
+  ["0020af61bffd7d2eb3cf8e9a8af01cf23d06b5a64bddadd0b147a0a0148bd6736952"],
+  ["002007c35a265ffaaca41cca33f385798d9698769e25b82dd79211bc8583a765d8b9"],
+]

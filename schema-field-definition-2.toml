@@ -1,0 +1,11 @@
+action = "create"
+version = 1
+schema = "schema_field_definition_v1"
+
+[fields.name]
+type = "str"
+value = "venue"
+
+[fields.type]
+type = "str"
+value = "pinned_relation"

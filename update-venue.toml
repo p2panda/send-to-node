@@ -1,0 +1,8 @@
+action = "update"
+version = 1
+schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
+previous_operations = ["0020644681203ecfeda6426908beae1aa26b4dc56cb11643d8ba733833818e8d07fb"]
+
+[fields.name]
+type = "str"
+value = "Petersburg Art Space"

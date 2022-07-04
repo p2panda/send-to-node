@@ -1,0 +1,7 @@
+action = "create"
+version = 1
+schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
+
+[fields.name]
+type = "str"
+value = "PAS"

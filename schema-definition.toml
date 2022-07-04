@@ -1,0 +1,17 @@
+action = "create"
+version = 1
+schema = "schema_definition_v1"
+
+[fields.name]
+type = "str"
+value = "venue"
+
+[fields.description]
+type = "str"
+value = "Fantastic festival venues"
+
+[fields.fields]
+type = "pinned_relation_list"
+value = [
+  ["002007c35a265ffaaca41cca33f385798d9698769e25b82dd79211bc8583a765d8b9"]
+]

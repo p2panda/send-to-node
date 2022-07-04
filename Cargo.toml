@@ -1,0 +1,14 @@
+[package]
+name = "send-to-node"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "3.2.8", features = ["derive"] }
+gql_client = "1.0.6"
+p2panda-rs = "0.4.0"
+serde = { version = "^1.0.137", features = ["derive"] }
+tokio = { version = "1.19.2", features = ["rt", "rt-multi-thread", "macros"] }
+toml = "0.5.9"
