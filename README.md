@@ -19,9 +19,9 @@ OPTIONS:
 ## Example
 
 ```bash
-# CREATE operation
+# CREATE operations
 cat schema-definition-2.toml | cargo run
 
-# UPDATE operation
+# UPDATE & DELETE operations
 cat schema-definition-2.toml | cargo run -- -d <document_id>
 ```
