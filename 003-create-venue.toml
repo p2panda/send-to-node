@@ -1,7 +1,7 @@
 action = "create"
 version = 1
-schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
+schema = "venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc"
 
 [fields.name]
 type = "str"
-value = "PAS"
+value = "Klangkeller"

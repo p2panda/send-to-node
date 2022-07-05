@@ -1,7 +1,7 @@
 action = "update"
 version = 1
-schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
-previous_operations = ["0020644681203ecfeda6426908beae1aa26b4dc56cb11643d8ba733833818e8d07fb"]
+schema = "venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc"
+previous_operations = ["00205446251e9d235fa7214cbd8a9a67e8d971bebecd875199cfe43fc5f038b8c6f5"]
 
 [fields.name]
 type = "str"
