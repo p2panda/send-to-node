@@ -40,3 +40,10 @@ cat update.toml | cargo run -- -d <document_id>
 If you want to reproduce the example operations, you should use the
 `key-demo.txt` private key. Make sure there is no data of this author yet on
 your node.
+
+Run the whole demo manually step by step or just use that script to run it
+automatically:
+
+```bash
+./demo.sh
+```
