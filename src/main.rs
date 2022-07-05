@@ -12,7 +12,7 @@ use p2panda_rs::document::DocumentId;
 use p2panda_rs::entry::{sign_and_encode, Entry};
 use p2panda_rs::hash::Hash;
 use p2panda_rs::identity::{Author, KeyPair};
-use p2panda_rs::operation::{AsOperation, Operation, OperationEncoded};
+use p2panda_rs::operation::{AsOperation, Operation, OperationAction, OperationEncoded};
 use p2panda_rs::schema::SchemaId;
 use p2panda_rs::Validate;
 use serde::Deserialize;
@@ -87,7 +87,9 @@ async fn main() {
         }}
         "#,
         public_key.as_str(),
-        document_id.map_or("null".to_owned(), |id| format!("\"{}\"", id.as_str())),
+        document_id
+            .as_ref()
+            .map_or("null".to_owned(), |id| format!("\"{}\"", id.as_str())),
     );
 
     let response: NextEntryArgsResponse = client
@@ -99,6 +101,12 @@ async fn main() {
     // Parse operation from stdin
     let operation: Operation = toml::from_str(&stdin).unwrap();
     operation.validate().expect("Invalid operation");
+
+    if operation.action() == OperationAction::Update
+        || operation.action() == OperationAction::Delete && document_id.is_none()
+    {
+        panic!("You're trying to UPDATE or DELETE a document without passing in the `-d` document id argument.")
+    }
 
     // Encode operation
     let encoded_operation =
