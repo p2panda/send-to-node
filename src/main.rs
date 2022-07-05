@@ -1,3 +1,4 @@
+use std::convert::TryFrom;
 use std::fmt::Write;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Read, Write as WriteIo};
@@ -6,7 +7,7 @@ use std::str::FromStr;
 
 use clap::Parser;
 use gql_client::Client;
-use p2panda_rs::cddl::{self, validate_cbor};
+use p2panda_rs::cddl::{self, validate_cbor, CddlValidationError};
 use p2panda_rs::document::DocumentId;
 use p2panda_rs::entry::{sign_and_encode, Entry};
 use p2panda_rs::hash::Hash;
@@ -57,51 +58,23 @@ struct NextEntryArguments {
     backlink: Option<Hash>,
 }
 
-fn read_file(path: &PathBuf) -> String {
-    let mut content = String::new();
-    let mut file = File::open(path).expect(&format!("Could not open file {:?}", path));
-    file.read_to_string(&mut content)
-        .expect(&format!("Could not read from file {:?}", path));
-    content
-}
-
-fn write_file(path: &PathBuf, content: &str) {
-    let mut file = File::create(path).expect(&format!("Could not create file {:?}", path));
-    write!(&mut file, "{}", content).unwrap();
-}
-
 #[tokio::main]
 async fn main() {
     let args = Args::parse();
-
-    // Read private key from file or generate a new one
-    let private_key = match Path::exists(&args.private_key) {
-        true => {
-            let key = read_file(&args.private_key);
-            key.replace("\n", "")
-        }
-        false => {
-            let key = hex::encode(KeyPair::new().private_key().to_bytes());
-            write_file(&args.private_key, &key);
-            key
-        }
-    };
+    let stdin = read_stdin();
+    let client = Client::new(args.endpoint);
 
     // Parse key pair
-    let key_pair = KeyPair::from_private_key_str(&private_key).expect("Invalid private key");
-    let public_key: Author = key_pair.public_key().to_owned().try_into().unwrap();
+    let key_pair = get_key_pair(&args.private_key);
+    let public_key = Author::try_from(key_pair.public_key().clone()).unwrap();
+    println!("Author: {}", public_key.as_str());
 
     // Parse document id
     let document_id = args
         .document_id
         .map(|id| DocumentId::from_str(&id).expect("Invalid document id"));
 
-    // Print some information
-    println!("Author: {}", public_key.as_str());
-
     // Do the requests
-    let client = Client::new(args.endpoint);
-
     let query = format!(
         r#"
         {{
@@ -123,15 +96,8 @@ async fn main() {
         .expect("GraphQL query to fetch `nextEntryArgs` failed");
     let next_entry_args = response.next_entry_args;
 
-    // Parse operation
-    let mut buffer = String::new();
-    let stdin = io::stdin();
-
-    for line in BufReader::new(stdin).lines() {
-        let value = line.as_ref().unwrap();
-        writeln!(buffer, "{}", value).unwrap();
-    }
-    let operation: Operation = toml::from_str(&buffer).unwrap();
+    // Parse operation from stdin
+    let operation: Operation = toml::from_str(&stdin).unwrap();
     operation.validate().expect("Invalid operation");
 
     // Encode operation
@@ -139,20 +105,10 @@ async fn main() {
         OperationEncoded::try_from(&operation).expect("Could not encode operation");
 
     // Validate schema!
-    let cddl = match operation.schema() {
-        SchemaId::Application(_, _) => None,
-        SchemaId::SchemaDefinition(_) => Some(cddl::SCHEMA_V1_FORMAT.as_str()),
-        SchemaId::SchemaFieldDefinition(_) => Some(cddl::SCHEMA_FIELD_V1_FORMAT.as_str()),
-    };
-
-    /* match cddl {
-        Some(str) => {
-            validate_cbor(str, &encoded_operation.to_bytes()).expect(
-                format!("Operation does not match schema \"{}\"", operation.schema()).as_str(),
-            );
-        }
-        None => (), // Could not validate application schema yet
-    } */
+    validate_schema(&operation.schema(), &encoded_operation.to_bytes()).expect(&format!(
+        "Operation does not match schema \"{}\"",
+        operation.schema()
+    ));
 
     // Sign and encode entry
     let entry = Entry::new(
@@ -182,10 +138,71 @@ async fn main() {
         encoded_operation.as_str()
     );
 
-    let _: PublishEntryResponse = client
+    let _response: PublishEntryResponse = client
         .query_unwrap(&query)
         .await
         .expect("GraphQL mutation `publishEntry` failed");
 
     println!("Woho!");
+}
+
+fn read_stdin() -> String {
+    let mut buffer = String::new();
+    let stdin = io::stdin();
+
+    for line in BufReader::new(stdin).lines() {
+        let value = line.as_ref().unwrap();
+        writeln!(buffer, "{}", value).unwrap();
+    }
+
+    buffer
+}
+
+fn read_file(path: &PathBuf) -> String {
+    let mut content = String::new();
+    let mut file = File::open(path).expect(&format!("Could not open file {:?}", path));
+    file.read_to_string(&mut content)
+        .expect(&format!("Could not read from file {:?}", path));
+    content
+}
+
+fn write_file(path: &PathBuf, content: &str) {
+    let mut file = File::create(path).expect(&format!("Could not create file {:?}", path));
+    write!(&mut file, "{}", content).unwrap();
+}
+
+fn get_key_pair(path: &PathBuf) -> KeyPair {
+    // Read private key from file or generate a new one
+    let private_key = match Path::exists(&path) {
+        true => {
+            let key = read_file(&path);
+            key.replace("\n", "")
+        }
+        false => {
+            let key = hex::encode(KeyPair::new().private_key().to_bytes());
+            write_file(&path, &key);
+            key
+        }
+    };
+
+    // Parse key pair
+    KeyPair::from_private_key_str(&private_key).expect("Invalid private key")
+}
+
+fn validate_schema(schema_id: &SchemaId, payload: &[u8]) -> Result<(), CddlValidationError> {
+    let cddl_str = match schema_id {
+        SchemaId::Application(_, _) => None,
+        SchemaId::SchemaDefinition(_) => Some(cddl::SCHEMA_V1_FORMAT.as_str()),
+        SchemaId::SchemaFieldDefinition(_) => {
+            // @TODO: CDDL definition is invalid for schema_field_definition_v1 :-)
+            // Related issue:
+            // Some(cddl::SCHEMA_FIELD_V1_FORMAT.as_str()),
+            None
+        }
+    };
+
+    match cddl_str {
+        Some(str) => validate_cbor(str, &payload),
+        None => Ok(()), // Could not validate application schema yet
+    }
 }
