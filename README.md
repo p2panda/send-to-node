@@ -29,8 +29,14 @@ OPTIONS:
 
 ```bash
 # CREATE operations
-cat 002-schema-definition-venue.toml | cargo run
+cat schema-definition.toml | cargo run
 
 # UPDATE & DELETE operations
-cat 004-update-venue.toml | cargo run -- -d <document_id>
+cat update.toml | cargo run -- -d <document_id>
 ```
+
+## Demo
+
+If you want to reproduce the example operations, you should use the
+`key-demo.txt` private key. Make sure there is no data of this author yet on
+your node.

@@ -1,0 +1,13 @@
+# For demo use document id: 0020785779ab68f23aebad5b5cc35dea32f8cbea57a028ccdb3d96345e21d2473de1
+
+action = "update"
+version = 1
+schema = "venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc"
+previous_operations = [
+  "00204bff6113fda4bc681f6ce426972c201a1249a214e24ba6426dade5ec59fc2ec9",
+  "002068db66a9016efcd014ed44011cac389d1bdc91a83fa5d145b52173ba4a62653d",
+]
+
+[fields.name]
+type = "str"
+value = "Everyone won!"

@@ -1,0 +1,14 @@
+action = "create"
+version = 1
+schema = "event_00202df408bc030ad916604035a3dc2c616b4d7ad61fc3e44f348bdc8bc363d24186"
+
+[fields.name]
+type = "str"
+value = "The historical merge conflict event"
+
+[fields.venue]
+type = "pinned_relation(venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc)"
+value = [
+  "00204bff6113fda4bc681f6ce426972c201a1249a214e24ba6426dade5ec59fc2ec9",
+  "002068db66a9016efcd014ed44011cac389d1bdc91a83fa5d145b52173ba4a62653d",
+]

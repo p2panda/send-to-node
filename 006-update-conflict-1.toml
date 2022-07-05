@@ -1,8 +1,0 @@
-action = "update"
-version = 1
-schema = "venue_0020f070826730950f9b54c01ad64cd75b32e6723d23159bf7bf7dcd6f9da81bf9ee"
-previous_operations = ["0020401b74787f7057b4d7abff11506c98ac1241b7d3da521de5f0a856970e5b5394"]
-
-[fields.name]
-type = "str"
-value = "Sam won!"

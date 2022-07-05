@@ -14,5 +14,5 @@ value = "An event in a historical venue"
 type = "pinned_relation_list"
 value = [
   ["00202a7945458f109191f5bfb5877ceb95b866032967518fc4166538b5a7bf5f430a"],
-  ["00207287306628c325973dc5973b5de1a330b287b08d3e3de99b6ecfa87cd52b23e0"],
+  ["0020d6d59bb631b861a8755e1447ef80ea8f25ab7f1874a5369a3bd6b24ee0ed48e9"],
 ]

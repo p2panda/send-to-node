@@ -8,4 +8,4 @@ value = "venue"
 
 [fields.type]
 type = "str"
-value = "pinned_relation"
+value = "pinned_relation(venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc)"
