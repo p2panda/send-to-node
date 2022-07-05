@@ -7,7 +7,7 @@ use std::str::FromStr;
 
 use clap::Parser;
 use gql_client::Client;
-use p2panda_rs::cddl::{self, validate_cbor, CddlValidationError};
+use p2panda_rs::cddl::{validate_cbor, CddlValidationError};
 use p2panda_rs::document::DocumentId;
 use p2panda_rs::entry::{sign_and_encode, Entry};
 use p2panda_rs::hash::Hash;
@@ -192,11 +192,16 @@ fn get_key_pair(path: &PathBuf) -> KeyPair {
 fn validate_schema(schema_id: &SchemaId, payload: &[u8]) -> Result<(), CddlValidationError> {
     let cddl_str = match schema_id {
         SchemaId::Application(_, _) => None,
-        SchemaId::SchemaDefinition(_) => Some(cddl::SCHEMA_V1_FORMAT.as_str()),
+        SchemaId::SchemaDefinition(_) => {
+            // @TODO: CDDL definition is invalid for schema_definition_v1 :-)
+            // Related issue: https://github.com/p2panda/p2panda/issues/387
+            // Some(p2panda_rs::cddl::SCHEMA_V1_FORMAT.as_str()),
+            None
+        }
         SchemaId::SchemaFieldDefinition(_) => {
             // @TODO: CDDL definition is invalid for schema_field_definition_v1 :-)
-            // Related issue:
-            // Some(cddl::SCHEMA_FIELD_V1_FORMAT.as_str()),
+            // Related issue: https://github.com/p2panda/p2panda/issues/386
+            // Some(p2panda_rs::cddl::SCHEMA_FIELD_V1_FORMAT.as_str()),
             None
         }
     };
