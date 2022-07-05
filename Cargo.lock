@@ -1790,6 +1790,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "gql_client",
+ "hex",
  "p2panda-rs",
  "serde",
  "tokio",

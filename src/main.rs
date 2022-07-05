@@ -1,7 +1,7 @@
 use std::fmt::Write;
 use std::fs::File;
-use std::io::{self, BufRead, BufReader, Read};
-use std::path::PathBuf;
+use std::io::{self, BufRead, BufReader, Read, Write as WriteIo};
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use clap::Parser;
@@ -57,19 +57,38 @@ struct NextEntryArguments {
     backlink: Option<Hash>,
 }
 
+fn read_file(path: &PathBuf) -> String {
+    let mut content = String::new();
+    let mut file = File::open(path).expect(&format!("Could not open file {:?}", path));
+    file.read_to_string(&mut content)
+        .expect(&format!("Could not read from file {:?}", path));
+    content
+}
+
+fn write_file(path: &PathBuf, content: &str) {
+    let mut file = File::create(path).expect(&format!("Could not create file {:?}", path));
+    write!(&mut file, "{}", content).unwrap();
+}
+
 #[tokio::main]
 async fn main() {
     let args = Args::parse();
 
-    // Read private key from file
-    let mut private_key = String::new();
-    let mut file = File::open(args.private_key).expect("Could not open private key file");
-    file.read_to_string(&mut private_key)
-        .expect("Could not read private key from file");
+    // Read private key from file or generate a new one
+    let private_key = match Path::exists(&args.private_key) {
+        true => {
+            let key = read_file(&args.private_key);
+            key.replace("\n", "")
+        }
+        false => {
+            let key = hex::encode(KeyPair::new().private_key().to_bytes());
+            write_file(&args.private_key, &key);
+            key
+        }
+    };
 
     // Parse key pair
-    let key_pair =
-        KeyPair::from_private_key_str(&private_key.replace("\n", "")).expect("Invalid private key");
+    let key_pair = KeyPair::from_private_key_str(&private_key).expect("Invalid private key");
     let public_key: Author = key_pair.public_key().to_owned().try_into().unwrap();
 
     // Parse document id
