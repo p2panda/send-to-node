@@ -102,8 +102,9 @@ async fn main() {
     let operation: Operation = toml::from_str(&stdin).unwrap();
     operation.validate().expect("Invalid operation");
 
-    if operation.action() == OperationAction::Update
-        || operation.action() == OperationAction::Delete && document_id.is_none()
+    if (operation.action() == OperationAction::Update
+        || operation.action() == OperationAction::Delete)
+        && document_id.is_none()
     {
         panic!("You're trying to UPDATE or DELETE a document without passing in the `-d` document id argument.")
     }
