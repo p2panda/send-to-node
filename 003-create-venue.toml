@@ -1,7 +1,0 @@
-action = "create"
-version = 1
-schema = "venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc"
-
-[fields.name]
-type = "str"
-value = "Klangkeller"

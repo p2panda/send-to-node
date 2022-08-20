@@ -1,0 +1,13 @@
+[
+  1,
+  0,
+  "schema_definition_v1",
+  {
+    "description": "An event in a historical venue",
+    "fields": [
+      ["00205a4f9c71f0bf8e8db6d0881822cce4a11d2f8e449aa453a9bdcb06406d5dea02"],
+      ["002099dd2c7a77ce59fddb48bcfd18baefc73888849436d471d4aba40aa8f027e13a"]
+    ],
+    "name": "event"
+  }
+]

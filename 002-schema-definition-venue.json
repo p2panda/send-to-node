@@ -1,0 +1,12 @@
+[
+  1,
+  0,
+  "schema_definition_v1",
+  {
+    "description": "Fantastic festival venues",
+    "fields": [
+      ["0020e50c05277627da82673db963dae8da23da9ddfad5b04b5cd6d1a392e88164604"]
+    ],
+    "name": "venue"
+  }
+]

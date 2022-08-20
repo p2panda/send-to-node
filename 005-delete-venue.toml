@@ -1,4 +1,0 @@
-action = "delete"
-version = 1
-schema = "venue_002020da00fe6fb680537b4f46858ca5e9ceb45983401cdad8abf1477330c9ce9fdc"
-previous_operations = ["002072750cb7873c7f4942b0ac3cd1dc38cfc32f922db5dfb68e66f16a12319f6c05"]

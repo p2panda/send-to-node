@@ -18,7 +18,6 @@ USAGE:
     send-to-node [OPTIONS]
 
 OPTIONS:
-    -d, --document-id <DOCUMENT_ID>
     -e, --endpoint <ENDPOINT>          [default: http://localhost:2020/graphql]
     -k, --private-key <PRIVATE_KEY>    [default: key.txt]
     -V, --version                      Print version information
@@ -28,11 +27,8 @@ OPTIONS:
 ## Example
 
 ```bash
-# CREATE operations
+# publish an operation
 cat schema-definition.toml | cargo run
-
-# UPDATE & DELETE operations
-cat update.toml | cargo run -- -d <document_id>
 ```
 
 ## Demo
