@@ -27,7 +27,7 @@ OPTIONS:
 ## Example
 
 ```bash
-# publish an operation
+# Publish an operation
 cat schema-definition.json | cargo run
 ```
 
