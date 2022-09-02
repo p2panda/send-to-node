@@ -48,7 +48,6 @@ automatically:
 
 [`MIT`](LICENSE)
 
-
 ## Supported by
 
 <img src="https://p2panda.org/images/ngi-logo.png" width="auto" height="80px"><br />
