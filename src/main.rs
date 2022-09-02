@@ -37,14 +37,14 @@ struct Args {
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct NextEntryArgsResponse {
-    next_entry_args: NextEntryArguments,
+    next_args: NextEntryArguments,
 }
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[allow(dead_code)]
 struct PublishEntryResponse {
-    publish_entry: NextEntryArguments,
+    publish: NextEntryArguments,
 }
 
 #[derive(Deserialize, Debug)]
@@ -92,7 +92,7 @@ async fn main() {
         .query_unwrap(&query)
         .await
         .expect("GraphQL query to fetch `nextArgs` failed");
-    let next_entry_args = response.next_entry_args;
+    let next_entry_args = response.next_args;
 
     let encoded_operation = encode_plain_operation(&operation).expect("Encode operation");
     let entry = sign_entry(
