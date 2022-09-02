@@ -18,10 +18,10 @@ USAGE:
     send-to-node [OPTIONS]
 
 OPTIONS:
-    -e, --endpoint <ENDPOINT>          [default: http://localhost:2020/graphql]
-    -k, --private-key <PRIVATE_KEY>    [default: key.txt]
-    -V, --version                      Print version information
+    -e, --endpoint <ENDPOINT>          Node endpoint URL [default: http://localhost:2020/graphql]
     -h, --help                         Print help information
+    -k, --private-key <PRIVATE_KEY>    Path to private key file [default: key.txt]
+    -V, --version                      Print version information
 ```
 
 ## Example
@@ -53,4 +53,6 @@ automatically:
 <img src="https://p2panda.org/images/ngi-logo.png" width="auto" height="80px"><br />
 <img src="https://p2panda.org/images/eu-flag-logo.png" width="auto" height="80px">
 
-*This project has received funding from the European Union’s Horizon 2020 research and innovation programme within the framework of the NGI-POINTER Project funded under grant agreement No 871528*
+*This project has received funding from the European Union’s Horizon 2020
+research and innovation programme within the framework of the NGI-POINTER
+Project funded under grant agreement No 871528*

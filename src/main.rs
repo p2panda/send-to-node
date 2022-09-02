@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 use std::fmt::Write;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Read, Write as WriteIo};
@@ -14,10 +16,11 @@ use p2panda_rs::operation::plain::PlainOperation;
 use p2panda_rs::operation::traits::Actionable;
 use serde::Deserialize;
 
-/// Send p2panda operations to a node from .toml files via stdin
+/// Send p2panda operations to a node from .json files via stdin.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
+    /// Node endpoint URL.
     #[clap(
         short = 'e',
         long,
@@ -26,6 +29,7 @@ struct Args {
     )]
     endpoint: String,
 
+    /// Path to private key file.
     #[clap(short = 'k', long, value_parser, default_value = "key.txt")]
     private_key: PathBuf,
 }
@@ -70,14 +74,14 @@ async fn main() {
     let query = format!(
         r#"
             {{
-                nextEntryArgs(publicKey: "{}", documentViewId: {}) {{
+                nextArgs(publicKey: "{}", viewId: {}) {{
                     logId
                     seqNum
                     skiplink
                     backlink
                 }}
             }}
-            "#,
+        "#,
         public_key.as_str(),
         operation
             .previous_operations()
@@ -87,7 +91,7 @@ async fn main() {
     let response: NextEntryArgsResponse = client
         .query_unwrap(&query)
         .await
-        .expect("GraphQL query to fetch `nextEntryArgs` failed");
+        .expect("GraphQL query to fetch `nextArgs` failed");
     let next_entry_args = response.next_entry_args;
 
     let encoded_operation = encode_plain_operation(&operation).expect("Encode operation");
@@ -107,22 +111,22 @@ async fn main() {
 
     let query = format!(
         r#"
-            mutation publishEntry {{
-                publishEntry(entry: "{}", operation: "{}") {{
+            mutation Publish {{
+                publish(entry: "{}", operation: "{}") {{
                     logId
                     seqNum
                     skiplink
                     backlink
                 }}
             }}
-            "#,
+        "#,
         encoded_entry, encoded_operation
     );
 
-    let _response: PublishEntryResponse = client
-        .query_unwrap(&query)
+    client
+        .query_unwrap::<PublishEntryResponse>(&query)
         .await
-        .expect("GraphQL mutation `publishEntry` failed");
+        .expect("GraphQL mutation `publish` failed");
 
     println!("Woho!");
 }
