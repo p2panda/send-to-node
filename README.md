@@ -5,7 +5,7 @@ operations to a node.
 
 ## Usage
 
-Create a `.toml` file describing the operation you want to send and pipe it
+Create a `.json` file describing the operation you want to send and pipe it
 into `send-to-node`. It will read the file from stdin, sign and encode the data
 and publish the entry on a node.
 
@@ -28,7 +28,7 @@ OPTIONS:
 
 ```bash
 # publish an operation
-cat schema-definition.toml | cargo run
+cat schema-definition.json | cargo run
 ```
 
 ## Demo
@@ -43,3 +43,15 @@ automatically:
 ```bash
 ./demo.sh
 ```
+
+## License
+
+[`MIT`](LICENSE)
+
+
+## Supported by
+
+<img src="https://p2panda.org/images/ngi-logo.png" width="auto" height="80px"><br />
+<img src="https://p2panda.org/images/eu-flag-logo.png" width="auto" height="80px">
+
+*This project has received funding from the European Union’s Horizon 2020 research and innovation programme within the framework of the NGI-POINTER Project funded under grant agreement No 871528*
