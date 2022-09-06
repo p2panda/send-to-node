@@ -1,1 +1,9 @@
-[1, 0, "schema_field_definition_v1", { "name": "name", "type": "str" }]
+[
+  1,
+  0,
+  "schema_field_definition_v1",
+  {
+    "name": "name",
+    "type": "str"
+  }
+]

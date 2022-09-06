@@ -62,7 +62,7 @@ struct NextArguments {
 
 #[tokio::main]
 async fn main() {
-    // 1. Handle command line arguments set by the user and read piped JSON file from stdin stream.
+    // 1. Handle command line arguments set by the user and read piped JSON file from stdin stream
     let args = Args::parse();
     let stdin = read_stdin();
 
