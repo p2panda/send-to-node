@@ -65,7 +65,7 @@ async fn main() {
     // Parse key pair
     let key_pair = get_key_pair(&args.private_key);
     let public_key = Author::from(key_pair.public_key());
-    println!("Author: {}", public_key.as_str());
+    println!("▶ Public Key: \"{}\"", public_key.as_str());
 
     // Parse operation from stdin
     let operation: PlainOperation = serde_json::from_str(&stdin).unwrap();
@@ -107,7 +107,7 @@ async fn main() {
 
     let encoded_entry = encode_entry(&entry).expect("Encode entry");
 
-    println!("{}", encoded_entry.hash());
+    println!("▶ Operation Id: \"{}\"", encoded_entry.hash());
 
     let query = format!(
         r#"
@@ -128,7 +128,7 @@ async fn main() {
         .await
         .expect("GraphQL mutation `publish` failed");
 
-    println!("Woho!");
+    println!("\nWoho! ヽ(￣(ｴ)￣)ﾉ");
 }
 
 fn read_stdin() -> String {
