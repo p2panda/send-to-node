@@ -89,7 +89,7 @@ async fn main() {
                 }}
             }}
         "#,
-        public_key.as_str(),
+        public_key,
         // Set `viewId` when `previous` is given in operation
         operation
             .previous_operations()
