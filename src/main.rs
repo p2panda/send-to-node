@@ -7,8 +7,9 @@ use std::path::{Path, PathBuf};
 
 use clap::Parser;
 use gql_client::Client;
-use p2panda_rs::entry::encode::{encode_entry, sign_entry};
+use p2panda_rs::entry::encode::sign_and_encode_entry;
 use p2panda_rs::entry::traits::AsEncodedEntry;
+use p2panda_rs::entry::{LogId, SeqNum};
 use p2panda_rs::hash::Hash;
 use p2panda_rs::identity::{Author, KeyPair};
 use p2panda_rs::operation::encode::encode_plain_operation;
@@ -34,43 +35,49 @@ struct Args {
     private_key: PathBuf,
 }
 
+/// GraphQL response for `nextArgs` query.
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct NextEntryArgsResponse {
-    next_args: NextEntryArguments,
+struct NextArgsResponse {
+    next_args: NextArguments,
 }
 
+/// GraphQL response for `publish` mutation.
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 #[allow(dead_code)]
-struct PublishEntryResponse {
-    publish: NextEntryArguments,
+struct PublishResponse {
+    publish: NextArguments,
 }
 
+/// GraphQL response giving us the next arguments to create an Bamboo entry.
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct NextEntryArguments {
-    log_id: String,
-    seq_num: String,
+struct NextArguments {
+    log_id: LogId,
+    seq_num: SeqNum,
     skiplink: Option<Hash>,
     backlink: Option<Hash>,
 }
 
 #[tokio::main]
 async fn main() {
+    // 1. Handle command line arguments set by the user and read piped JSON file from stdin stream.
     let args = Args::parse();
     let stdin = read_stdin();
+
+    // 2. Prepare GraphQL client making request against our p2panda node
     let client = Client::new(args.endpoint);
 
-    // Parse key pair
+    // 3. Load private key from given file, generate a new one if it doesn't exist yet
     let key_pair = get_key_pair(&args.private_key);
     let public_key = Author::from(key_pair.public_key());
-    println!("▶ Public Key: \"{}\"", public_key.as_str());
+    println!("▶ Public Key: \"{}\"", public_key);
 
-    // Parse operation from stdin
+    // 4. Parse operation from stdin, it comes as a JSON string
     let operation: PlainOperation = serde_json::from_str(&stdin).unwrap();
 
-    // Do the requests
+    // 5. Send `nextArgs` GraphQL query to get the arguments from the node to create the next entry
     let query = format!(
         r#"
             {{
@@ -83,32 +90,32 @@ async fn main() {
             }}
         "#,
         public_key.as_str(),
+        // Set `viewId` when `previous` is given in operation
         operation
             .previous_operations()
             .map_or("null".to_owned(), |id| format!("\"{}\"", id)),
     );
 
-    let response: NextEntryArgsResponse = client
+    let response: NextArgsResponse = client
         .query_unwrap(&query)
         .await
         .expect("GraphQL query to fetch `nextArgs` failed");
     let next_entry_args = response.next_args;
 
-    let encoded_operation = encode_plain_operation(&operation).expect("Encode operation");
-    let entry = sign_entry(
-        &next_entry_args.log_id.parse().unwrap(),
-        &next_entry_args.seq_num.parse().unwrap(),
+    // 6. Create p2panda data! Encode operation, sign and encode entry
+    let encoded_operation = encode_plain_operation(&operation).expect("Could not encode operation");
+    let encoded_entry = sign_and_encode_entry(
+        &next_entry_args.log_id,
+        &next_entry_args.seq_num,
         next_entry_args.skiplink.as_ref(),
         next_entry_args.backlink.as_ref(),
         &encoded_operation,
         &key_pair,
     )
-    .expect("Sign entry");
-
-    let encoded_entry = encode_entry(&entry).expect("Encode entry");
-
+    .expect("Could not sign and encode entry");
     println!("▶ Operation Id: \"{}\"", encoded_entry.hash());
 
+    // 7. Publish operation and entry with GraphQL `publish` mutation
     let query = format!(
         r#"
             mutation Publish {{
@@ -124,13 +131,14 @@ async fn main() {
     );
 
     client
-        .query_unwrap::<PublishEntryResponse>(&query)
+        .query_unwrap::<PublishResponse>(&query)
         .await
         .expect("GraphQL mutation `publish` failed");
 
     println!("\nWoho! ヽ(￣(ｴ)￣)ﾉ");
 }
 
+/// Helper method to read string from stdin.
 fn read_stdin() -> String {
     let mut buffer = String::new();
     let stdin = io::stdin();
@@ -143,6 +151,7 @@ fn read_stdin() -> String {
     buffer
 }
 
+/// Helper method to read a file.
 fn read_file(path: &PathBuf) -> String {
     let mut content = String::new();
     let mut file = File::open(path).expect(&format!("Could not open file {:?}", path));
@@ -151,11 +160,14 @@ fn read_file(path: &PathBuf) -> String {
     content
 }
 
+/// Helper method to write a file.
 fn write_file(path: &PathBuf, content: &str) {
     let mut file = File::create(path).expect(&format!("Could not create file {:?}", path));
     write!(&mut file, "{}", content).unwrap();
 }
 
+/// Helper method to read a private key from a file, deriving a key pair from it. If it doesn't
+/// exist yet, a new key pair will be generated automatically.
 fn get_key_pair(path: &PathBuf) -> KeyPair {
     // Read private key from file or generate a new one
     let private_key = match Path::exists(&path) {
@@ -170,6 +182,6 @@ fn get_key_pair(path: &PathBuf) -> KeyPair {
         }
     };
 
-    // Parse key pair
+    // Derive key pair from private key
     KeyPair::from_private_key_str(&private_key).expect("Invalid private key")
 }
