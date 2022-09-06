@@ -100,15 +100,15 @@ async fn main() {
         .query_unwrap(&query)
         .await
         .expect("GraphQL query to fetch `nextArgs` failed");
-    let next_entry_args = response.next_args;
+    let args = response.next_args;
 
     // 6. Create p2panda data! Encode operation, sign and encode entry
     let encoded_operation = encode_plain_operation(&operation).expect("Could not encode operation");
     let encoded_entry = sign_and_encode_entry(
-        &next_entry_args.log_id,
-        &next_entry_args.seq_num,
-        next_entry_args.skiplink.as_ref(),
-        next_entry_args.backlink.as_ref(),
+        &args.log_id,
+        &args.seq_num,
+        args.skiplink.as_ref(),
+        args.backlink.as_ref(),
         &encoded_operation,
         &key_pair,
     )
@@ -154,15 +154,16 @@ fn read_stdin() -> String {
 /// Helper method to read a file.
 fn read_file(path: &PathBuf) -> String {
     let mut content = String::new();
-    let mut file = File::open(path).expect(&format!("Could not open file {:?}", path));
+    let mut file = File::open(path).unwrap_or_else(|_| panic!("Could not open file {:?}", path));
     file.read_to_string(&mut content)
-        .expect(&format!("Could not read from file {:?}", path));
+        .unwrap_or_else(|_| panic!("Could not read from file {:?}", path));
     content
 }
 
 /// Helper method to write a file.
 fn write_file(path: &PathBuf, content: &str) {
-    let mut file = File::create(path).expect(&format!("Could not create file {:?}", path));
+    let mut file =
+        File::create(path).unwrap_or_else(|_| panic!("Could not create file {:?}", path));
     write!(&mut file, "{}", content).unwrap();
 }
 
@@ -170,14 +171,14 @@ fn write_file(path: &PathBuf, content: &str) {
 /// exist yet, a new key pair will be generated automatically.
 fn get_key_pair(path: &PathBuf) -> KeyPair {
     // Read private key from file or generate a new one
-    let private_key = match Path::exists(&path) {
+    let private_key = match Path::exists(path) {
         true => {
-            let key = read_file(&path);
-            key.replace("\n", "")
+            let key = read_file(path);
+            key.replace('\n', "")
         }
         false => {
             let key = hex::encode(KeyPair::new().private_key().to_bytes());
-            write_file(&path, &key);
+            write_file(path, &key);
             key
         }
     };
