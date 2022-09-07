@@ -11,7 +11,7 @@ use p2panda_rs::entry::encode::sign_and_encode_entry;
 use p2panda_rs::entry::traits::AsEncodedEntry;
 use p2panda_rs::entry::{LogId, SeqNum};
 use p2panda_rs::hash::Hash;
-use p2panda_rs::identity::{Author, KeyPair};
+use p2panda_rs::identity::KeyPair;
 use p2panda_rs::operation::encode::encode_plain_operation;
 use p2panda_rs::operation::plain::PlainOperation;
 use p2panda_rs::operation::traits::Actionable;
@@ -71,7 +71,7 @@ async fn main() {
 
     // 3. Load private key from given file, generate a new one if it doesn't exist yet
     let key_pair = get_key_pair(&args.private_key);
-    let public_key = Author::from(key_pair.public_key());
+    let public_key = key_pair.public_key();
     println!("▶ Public Key: \"{}\"", public_key);
 
     // 4. Parse operation from stdin, it comes as a JSON string
@@ -92,7 +92,7 @@ async fn main() {
         public_key,
         // Set `viewId` when `previous` is given in operation
         operation
-            .previous_operations()
+            .previous()
             .map_or("null".to_owned(), |id| format!("\"{}\"", id)),
     );
 
