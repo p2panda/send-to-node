@@ -33,6 +33,10 @@ struct Args {
     /// Path to private key file.
     #[clap(short = 'k', long, value_parser, default_value = "key.txt")]
     private_key: PathBuf,
+
+    /// Optional path to JSON file to parse the operation else reads piped JSON file from stdin
+    #[clap(short = 'f', long, value_parser)]
+    file: Option<PathBuf>,
 }
 
 /// GraphQL response for `nextArgs` query.
@@ -64,7 +68,11 @@ struct NextArguments {
 async fn main() {
     // 1. Handle command line arguments set by the user and read piped JSON file from stdin stream
     let args = Args::parse();
-    let stdin = read_stdin();
+    let json = if args.file.is_some() {
+        read_file(&args.file.unwrap())
+    } else {
+        read_stdin()
+    };
 
     // 2. Prepare GraphQL client making request against our p2panda node
     let client = Client::new(args.endpoint);
@@ -74,8 +82,8 @@ async fn main() {
     let public_key = key_pair.public_key();
     println!("▶ Public Key: \"{}\"", public_key);
 
-    // 4. Parse operation from stdin, it comes as a JSON string
-    let operation: PlainOperation = serde_json::from_str(&stdin).unwrap();
+    // 4. Parse operation from JSON file or stdin, it comes as a JSON string
+    let operation: PlainOperation = serde_json::from_str(&json).unwrap();
 
     // 5. Send `nextArgs` GraphQL query to get the arguments from the node to create the next entry
     let query = format!(
@@ -171,16 +179,13 @@ fn write_file(path: &PathBuf, content: &str) {
 /// exist yet, a new key pair will be generated automatically.
 fn get_key_pair(path: &PathBuf) -> KeyPair {
     // Read private key from file or generate a new one
-    let private_key = match Path::exists(path) {
-        true => {
-            let key = read_file(path);
-            key.replace('\n', "")
-        }
-        false => {
-            let key = hex::encode(KeyPair::new().private_key().to_bytes());
-            write_file(path, &key);
-            key
-        }
+    let private_key = if Path::exists(path) {
+        let key = read_file(path);
+        key.replace('\n', "")
+    } else {
+        let key = hex::encode(KeyPair::new().private_key().to_bytes());
+        write_file(path, &key);
+        key
     };
 
     // Derive key pair from private key
