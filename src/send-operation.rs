@@ -33,10 +33,6 @@ struct Args {
     /// Path to private key file.
     #[clap(short = 'k', long, value_parser, default_value = "key.txt")]
     private_key: PathBuf,
-
-    /// Optional path to JSON file to parse the operation else reads piped JSON file from stdin
-    #[clap(short = 'f', long, value_parser)]
-    file: Option<PathBuf>,
 }
 
 /// GraphQL response for `nextArgs` query.
@@ -68,11 +64,7 @@ struct NextArguments {
 async fn main() {
     // 1. Handle command line arguments set by the user and read piped JSON file from stdin stream
     let args = Args::parse();
-    let json = if args.file.is_some() {
-        read_file(&args.file.unwrap())
-    } else {
-        read_stdin()
-    };
+    let json = read_stdin();
 
     // 2. Prepare GraphQL client making request against our p2panda node
     let client = Client::new(args.endpoint);

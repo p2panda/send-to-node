@@ -19,10 +19,9 @@ USAGE:
 
 OPTIONS:
     -e, --endpoint <ENDPOINT>          Node endpoint URL [default: http://localhost:2020/graphql]
-    -f, --file <FILE>                  Optional path to JSON file to parse the operation else reads
                                        piped JSON file from stdin
-    -h, --help                         Print help information
     -k, --private-key <PRIVATE_KEY>    Path to private key file [default: key.txt]
+    -h, --help                         Print help information
     -V, --version                      Print version information
 ```
 
