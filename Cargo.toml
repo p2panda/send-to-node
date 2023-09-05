@@ -23,6 +23,7 @@ name = "send-blob-to-node"
 path = "src/send-blob.rs"
 
 [dependencies]
+anyhow = "1.0.75"
 clap = { version = "^4.4.2", features = ["derive"] }
 gql_client = "^1.0.7"
 hex = "^0.4.3"
