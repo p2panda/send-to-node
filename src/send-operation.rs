@@ -19,7 +19,7 @@ use serde::Deserialize;
 
 /// Send p2panda operations to a node from .json files via stdin.
 #[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
+#[clap(version, about, long_about = None)]
 struct Args {
     /// Node endpoint URL.
     #[clap(

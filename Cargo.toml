@@ -23,10 +23,10 @@ name = "send-blob-to-node"
 path = "src/send-blob.rs"
 
 [dependencies]
-clap = { version = "^3.2.8", features = ["derive"] }
-gql_client = "^1.0.6"
+clap = { version = "^4.4.2", features = ["derive"] }
+gql_client = "^1.0.7"
 hex = "^0.4.3"
 p2panda-rs = { git = "https://github.com/p2panda/p2panda", rev = "ffe48e8be09b28373ed8f6d7c073ba1e8687aadb" }
-serde = { version = "^1.0.137", features = ["derive"] }
-serde_json = "^1.0.83"
-tokio = { version = "^1.19.2", features = ["rt", "rt-multi-thread", "macros"] }
+serde = { version = "^1.0.188", features = ["derive"] }
+serde_json = "^1.0.105"
+tokio = { version = "^1.32.0", features = ["rt", "rt-multi-thread", "macros"] }
