@@ -38,16 +38,16 @@ cp ./target/release/send-blob-to-node ~/.local/bin
 This repository consists of two separate programs `send-to-node` and
 `send-blob-to-node`.
 
+The private key used to sign the data you are creating is inside of
+`key.txt`, the program will read it from there. If the file does not exist
+yet, a new key will be generated and placed in this file.
+
 ### Send operations with `send-to-node`
 
 Create a `.json` file describing the operation you want to send and pipe it
 into `send-to-node`. It will read the file from stdin, sign and encode the data
 and publish the entry on a node. Alternatively you can also use the `[PATH]`
 argument to refer to the file.
-
-The private key is inside of `key.txt`, the program will read it from there. If
-the file does not exist yet, a new key will be generated and placed in this
-file.
 
 #### Arguments
 
