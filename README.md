@@ -49,6 +49,9 @@ into `send-to-node`. It will read the file from stdin, sign and encode the data
 and publish the entry on a node. Alternatively you can also use the `[PATH]`
 argument to refer to the file.
 
+> The encoding format of p2panda operations is CBOR but for `send-to-node` were using JSON
+> for its user interface, since it is a human-readable format.
+
 #### Arguments
 
 ```
