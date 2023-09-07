@@ -8,6 +8,7 @@ use std::path::{Path, PathBuf};
 use p2panda_rs::identity::KeyPair;
 
 /// Helper method to read string from stdin.
+#[allow(dead_code)]
 pub fn read_stdin() -> String {
     let mut buffer = String::new();
     let stdin = std::io::stdin();
