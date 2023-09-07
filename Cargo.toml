@@ -1,23 +1,35 @@
 [package]
 name = "send-to-node"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     "adz <x1d@adz.garden>",
     "cafca <cafca@001.land>",
     "sandreae <contact@samandreae.com>",
 ]
-description = "Command line tool to send p2panda operations to a node"
+description = "Command line tool to send p2panda operations and blobs to a node"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/p2panda/send-to-node"
 publish = false
+default-run = "send-to-node"
+
+[[bin]]
+name = "send-to-node"
+path = "src/send-operation.rs"
+
+[[bin]]
+name = "send-blob-to-node"
+path = "src/send-blob.rs"
 
 [dependencies]
-clap = { version = "^3.2.8", features = ["derive"] }
-gql_client = "^1.0.6"
+anyhow = "1.0.75"
+clap = { version = "^4.4.2", features = ["derive"] }
+gql_client = "^1.0.7"
 hex = "^0.4.3"
-p2panda-rs = "^0.6.0"
-serde = { version = "^1.0.137", features = ["derive"] }
-serde_json = "^1.0.83"
-tokio = { version = "^1.19.2", features = ["rt", "rt-multi-thread", "macros"] }
+indicatif = "0.17.6"
+mime_guess = "2.0.4"
+p2panda-rs = { git = "https://github.com/p2panda/p2panda", rev = "b5675fe7d194632a3e55d839f3d501210328b3d5" }
+serde = { version = "^1.0.188", features = ["derive"] }
+serde_json = "^1.0.105"
+tokio = { version = "^1.32.0", features = ["rt", "rt-multi-thread", "macros", "fs"] }

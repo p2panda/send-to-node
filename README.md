@@ -1,7 +1,11 @@
 # send-to-node
 
-Command line tool to send [p2panda](https://github.com/p2panda/handbook)
-operations to a node.
+Command line tools to send [p2panda](https://p2panda.org) operations and upload
+files to a node.
+
+These tools are simple low-level clients to interact with
+[nodes](https://github.com/p2panda/aquadoggo) and help with experimentation and
+holding workshops with p2panda and supporting debugging and development.
 
 ## Installation
 
@@ -31,32 +35,72 @@ cp ./target/release/send-blob-to-node ~/.local/bin
 
 ## Usage
 
+This repository consists of two separate programs `send-to-node` and
+`send-blob-to-node`.
+
+### Send operations with `send-to-node`
+
 Create a `.json` file describing the operation you want to send and pipe it
 into `send-to-node`. It will read the file from stdin, sign and encode the data
-and publish the entry on a node.
+and publish the entry on a node. Alternatively you can also use the `[PATH]`
+argument to refer to the file.
 
 The private key is inside of `key.txt`, the program will read it from there. If
 the file does not exist yet, a new key will be generated and placed in this
 file.
 
-```
-USAGE:
-    send-to-node [OPTIONS]
+#### Arguments
 
-OPTIONS:
-    -e, --endpoint <ENDPOINT>          Node endpoint URL [default: http://localhost:2020/graphql]
-    -f, --file <FILE>                  Optional path to JSON file to parse the operation else reads
-                                       piped JSON file from stdin
-    -h, --help                         Print help information
-    -k, --private-key <PRIVATE_KEY>    Path to private key file [default: key.txt]
-    -V, --version                      Print version information
+```
+Usage: send-to-node [OPTIONS] [PATH]
+
+Arguments:
+  [PATH]  Path to file containing operation encoded in JSON format
+
+Options:
+  -e, --endpoint <ENDPOINT>        Node endpoint URL [default: http://localhost:2020/graphql]
+  -k, --private-key <PRIVATE_KEY>  Path to private key file [default: key.txt]
+  -h, --help                       Print help
+  -V, --version                    Print version
 ```
 
-## Example
+#### Example
 
 ```bash
 # Publish an operation
-cat schema-definition.json | cargo run
+cat schema-definition.json | send-to-node
+
+# Same, but using the "path" argument
+send-to-node schema-definition.json
+```
+
+### Upload files with `send-blob-to-node`
+
+Upload any file to a node using `send-blob-to-node`. It will automatically
+split the file into blob pieces according to the p2panda specification,
+determine it's mime type by looking at the file extension, encode and sign the
+operations and send them to the node.
+
+#### Arguments
+
+```
+Usage: send-blob-to-node [OPTIONS] <PATH>
+
+Arguments:
+  <PATH>  Path to (binary) file which should be uploaded to node
+
+Options:
+  -e, --endpoint <ENDPOINT>        Node endpoint URL [default: http://localhost:2020/graphql]
+  -k, --private-key <PRIVATE_KEY>  Path to private key file [default: key.txt]
+  -h, --help                       Print help
+  -V, --version                    Print version
+```
+
+#### Example
+
+```bash
+# Upload a large file
+send-blob-to-node my-large-file.wav
 ```
 
 ## Demo
@@ -72,6 +116,16 @@ automatically:
 ./demo.sh
 ```
 
+## Development
+
+```bash
+# Run `send-to-node`
+cargo run -- --endpoint http://localhost:2020/graphql
+
+# Run `send-blob-to-node`
+cargo run --bin send-blob-to-node -- my-large-file.wav
+```
+
 ## License
 
 [`MIT`](LICENSE)
@@ -79,8 +133,9 @@ automatically:
 ## Supported by
 
 <img src="https://raw.githubusercontent.com/p2panda/.github/main/assets/ngi-logo.png" width="auto" height="80px"><br />
+<img src="https://raw.githubusercontent.com/p2panda/.github/main/assets/nlnet-logo.svg" width="auto" height="80px"><br />
 <img src="https://raw.githubusercontent.com/p2panda/.github/main/assets/eu-flag-logo.png" width="auto" height="80px">
 
 *This project has received funding from the European Union’s Horizon 2020
 research and innovation programme within the framework of the NGI-POINTER
-Project funded under grant agreement No 871528*
+Project funded under grant agreement No 871528 and NGI-ASSURE No 957073*
