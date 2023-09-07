@@ -6,7 +6,7 @@ authors = [
     "cafca <cafca@001.land>",
     "sandreae <contact@samandreae.com>",
 ]
-description = "Command line tool to send p2panda operations and blobs to a node"
+description = "Command line tools to send p2panda operations and upload files to a node"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
@@ -21,6 +21,11 @@ path = "src/send-operation.rs"
 [[bin]]
 name = "send-blob-to-node"
 path = "src/send-blob.rs"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
 
 [dependencies]
 anyhow = "1.0.75"
