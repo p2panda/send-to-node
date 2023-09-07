@@ -1038,7 +1038,7 @@ dependencies = [
 [[package]]
 name = "p2panda-rs"
 version = "0.7.1"
-source = "git+https://github.com/p2panda/p2panda?rev=ffe48e8be09b28373ed8f6d7c073ba1e8687aadb#ffe48e8be09b28373ed8f6d7c073ba1e8687aadb"
+source = "git+https://github.com/p2panda/p2panda?rev=b5675fe7d194632a3e55d839f3d501210328b3d5#b5675fe7d194632a3e55d839f3d501210328b3d5"
 dependencies = [
  "arrayvec 0.5.2",
  "bamboo-rs-core-ed25519-yasmf",
@@ -1342,9 +1342,9 @@ dependencies = [
 
 [[package]]
 name = "serde-wasm-bindgen"
-version = "0.4.5"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3b4c031cd0d9014307d82b8abf653c0290fbdaeb4c02d00c63cf52f728628bf"
+checksum = "f3b143e2833c57ab9ad3ea280d21fd34e285a42837aeb0ee301f4f41890fa00e"
 dependencies = [
  "js-sys",
  "serde",
