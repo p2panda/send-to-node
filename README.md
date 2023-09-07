@@ -3,6 +3,32 @@
 Command line tool to send [p2panda](https://github.com/p2panda/handbook)
 operations to a node.
 
+## Installation
+
+### Pre-compiled binaries
+
+Check out our [Releases](https://github.com/p2panda/send-to-node/releases)
+section where we publish binaries for Linux, RaspberryPi, MacOS and Windows.
+
+### Compile it yourself
+
+For the following steps you need a
+[Rust](https://www.rust-lang.org/learn/get-started) development environment on
+your machine.
+
+```bash
+# Download source code
+git clone https://github.com/p2panda/send-to-node.git
+cd send-to-node
+
+# Compile both binaries
+cargo build --release --bins
+
+# Copy binaries into your path (example)
+cp ./target/release/send-to-node ~/.local/bin
+cp ./target/release/send-blob-to-node ~/.local/bin
+```
+
 ## Usage
 
 Create a `.json` file describing the operation you want to send and pipe it
