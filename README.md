@@ -50,7 +50,8 @@ and publish the entry on a node. Alternatively you can also use the `[PATH]`
 argument to refer to the file.
 
 > The encoding format of p2panda operations is CBOR but for `send-to-node` were using JSON
-> for its user interface, since it is a human-readable format.
+> for its user interface, since it is a human-readable format. Internally `send-to-node`
+> converts your input into the correct CBOR format.
 
 #### Arguments
 
