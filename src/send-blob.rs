@@ -81,7 +81,7 @@ async fn main() -> Result<()> {
 
         // Send blob piece to node
         let operation = OperationBuilder::new(&SchemaId::BlobPiece(1))
-            .fields(&[("data", buf[..].into())])
+            .fields(&[("data", buf[..size].into())])
             .build()?;
         let operation_id = client
             .sign_and_send(&key_pair, &PlainOperation::from(&operation))
