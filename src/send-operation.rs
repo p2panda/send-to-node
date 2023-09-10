@@ -45,7 +45,7 @@ async fn main() -> Result<()> {
     };
 
     // Prepare GraphQL client making request against our p2panda node
-    let client = Client::new(&args.endpoint);
+    let mut client = Client::new(&args.endpoint);
 
     // Load private key from given file, generate a new one if it doesn't exist yet
     let key_pair = io::get_key_pair(&args.private_key);

@@ -43,7 +43,7 @@ struct Args {
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-    let client = Client::new(&args.endpoint);
+    let mut client = Client::new(&args.endpoint);
 
     // Load private key from given file, generate a new one if it doesn't exist yet
     let key_pair = io::get_key_pair(&args.private_key);
