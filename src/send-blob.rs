@@ -58,7 +58,7 @@ async fn main() -> Result<()> {
         Some(guessed_type) => guessed_type.to_string(),
         None => "application/octet-stream".into(),
     };
-    let expected_blob_pieces = file_size / MAX_BLOB_PIECE_LENGTH as u64;
+    let expected_blob_pieces = (file_size as f32 / MAX_BLOB_PIECE_LENGTH as f32).ceil();
     println!(
         "▶ File: \"{}\" ({}, {} blob pieces)",
         mime_type,
