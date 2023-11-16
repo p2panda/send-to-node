@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add `send-blob-to-node` binary to upload files [#3](https://github.com/p2panda/send-to-node/pull/3)
 
+### Changed
+
+* Update `p2panda-rs` to `v0.8.0` [#6](https://github.com/p2panda/send-to-node/pull/6)
+
 ## [0.1.0]
 
 * Initial `send-to-node` release with demo
