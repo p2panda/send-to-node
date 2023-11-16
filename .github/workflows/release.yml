@@ -45,6 +45,6 @@ jobs:
           tar: unix
           zip: windows
           checksum: sha512
-          archive: $bin-$tag-$target
+          archive: send-to-node-$tag-$target
           target: ${{ matrix.target }}
           token: ${{ secrets.GITHUB_TOKEN }}
