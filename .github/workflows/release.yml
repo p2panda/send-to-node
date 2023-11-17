@@ -32,6 +32,9 @@ jobs:
             os: macos-latest
           - target: x86_64-apple-darwin # # 64-bit macOS (10.7+, Lion+)
             os: macos-latest
+          # Windows builds are currently not working because of openssl
+          # cross-compilation issues.
+          # See related issue: https://github.com/p2panda/send-to-node/issues/7
           # - target: x86_64-pc-windows-gnu # 64-bit MinGW (Windows 7+)
           #   os: windows-latest
           # - target: x86_64-pc-windows-msvc # 64-bit MSVC (Windows 7+)
