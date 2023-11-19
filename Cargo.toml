@@ -1,6 +1,6 @@
 [package]
 name = "send-to-node"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
     "adz <x1d@adz.garden>",
     "cafca <cafca@001.land>",
