@@ -1047,9 +1047,9 @@ dependencies = [
 
 [[package]]
 name = "p2panda-rs"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cacd81a36e7fb04d4b6fcea3023885f65fc9f97cfb1739b7e5c9d1c183a83d44"
+checksum = "ea228ef64ba3caa0f77d22bdc21ba7533b989b03aacc921b54b843ea6f0f8d97"
 dependencies = [
  "arrayvec 0.5.2",
  "bamboo-rs-core-ed25519-yasmf",
