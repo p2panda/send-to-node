@@ -4,6 +4,6 @@
   "schema_field_definition_v1",
   {
     "name": "venue",
-    "type": "pinned_relation(venue_0020e2ba08c0b62fa2f974dc70347311adecf8910a01607d7e096482de3952e90549)"
+    "type": "pinned_relation(venue_00207355cd31dc9108571daa8684ff44d12b81c3ee04dcd1c2bf063a4d2e5f872e21)"
   }
 ]

@@ -5,8 +5,8 @@
   {
     "description": "An event in a historical venue",
     "fields": [
-      ["002023bb78c051a8d73aa26094b60d05ef3ef8fba8008f62d2c30f1fe8d9dcf87925"],
-      ["002099dd2c7a77ce59fddb48bcfd18baefc73888849436d471d4aba40aa8f027e13a"]
+      ["002099dd2c7a77ce59fddb48bcfd18baefc73888849436d471d4aba40aa8f027e13a"],
+      ["0020eb2b3af23b7d7a3917cdebe08dc848bc4d5cddb39e23e6dac49790db282af931"]
     ],
     "name": "event"
   }
